@@ -1,10 +1,20 @@
-import axios from 'axios'
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-axios.get("https://api.github.com/users/kwnie")
+
+let githubData = axios.get('https://api.github.com/users/kwnie')
+    //.then( response => {
+        // Remember response is an object, response.data is an array.
+        //response.githubData.forEach( item => {
+          //  let newCard = cardMaker(item);
+            //cards.appendChild(newCard)
+        //})
+    //})
+    //.catch( error => {
+      //  console.log("Error:", error);
+    //})
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -18,6 +28,11 @@ axios.get("https://api.github.com/users/kwnie")
     and append the returned markup to the DOM as a child of .cards
 */
 
+let newCard = cardMaker(githubData)
+let cards = document.querySelector('.cards')
+cards.appendChild(newCard)
+
+
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
     follow this link in your browser https://api.github.com/users/<Your github name>/followers,
@@ -30,6 +45,19 @@ axios.get("https://api.github.com/users/kwnie")
 */
 
 const followersArray = [];
+followersArray.push( 
+  'tetondan',
+  'dustinmyers',
+  'justsml',
+  'luishrd',
+  'bigknell') 
+
+
+followersArray.forEach(user => {
+  axios.get(`https://api.github.com/users/${user}`)
+  let newCard = cardMaker(user)
+  cards.appendChild(newCard)
+})
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -51,7 +79,7 @@ const followersArray = [];
     </div>
 */
 
-function cardMaker(object){
+function cardMaker(data){
   let card = document.createElement('div')
   let img = document.createElement('img')
   let cardInfo = document.createElement('div')
@@ -80,20 +108,22 @@ function cardMaker(object){
   name.classList.add('name')
   username.classList.add('username')
 
-  img.src = object['avatar_url']
-  githubAddress.href = object['url']
+  img.src = data['avatar_url']
+  githubAddress.href = data['url']
 
-  name.textContent = object['name']
-  username.textContent = object['login']
-  location.textContent = `Location: ${object['location']}`
+  name.textContent = data['name']
+  username.textContent = data['login']
+  location.textContent = `Location: ${data['location']}`
   profile.textContent = 'Profile: '
-  githubAddress.textContent = object['url']
-  followers.textContent = `Followers: ${object['followers']}`
-  following.textContent = `Following: ${object['following']}`
-  bio.textContent = `Bio: ${object['bio']}`
+  githubAddress.textContent = data['url']
+  followers.textContent = `Followers: ${data['followers']}`
+  following.textContent = `Following: ${data['following']}`
+  bio.textContent = `Bio: ${data['bio']}`
 
   return card
 }
+
+
 
 /*
   List of LS Instructors Github username's:
