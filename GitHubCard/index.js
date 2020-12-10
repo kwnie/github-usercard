@@ -1,20 +1,10 @@
+import axios from 'axios'
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-
-let githubData = axios.get('https://api.github.com/users/kwnie')
-    //.then( response => {
-        // Remember response is an object, response.data is an array.
-        //response.githubData.forEach( item => {
-          //  let newCard = cardMaker(item);
-            //cards.appendChild(newCard)
-        //})
-    //})
-    //.catch( error => {
-      //  console.log("Error:", error);
-    //})
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -22,16 +12,17 @@ let githubData = axios.get('https://api.github.com/users/kwnie')
 
     Skip to STEP 3.
 */
-
 /*
   STEP 4: Pass the data received from Github into your function,
     and append the returned markup to the DOM as a child of .cards
 */
-
-let newCard = cardMaker(githubData)
-let cards = document.querySelector('.cards')
-cards.appendChild(newCard)
-
+axios.get('https://api.github.com/users/kwnie')
+.then(data => {
+  let cards = document.querySelector('div.cards')
+  let newCard = cardMaker(data)
+  cards.appendChild(newCard)
+})
+.catch(err => console.log(err))
 
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
@@ -55,8 +46,12 @@ followersArray.push(
 
 followersArray.forEach(user => {
   axios.get(`https://api.github.com/users/${user}`)
-  let newCard = cardMaker(user)
-  cards.appendChild(newCard)
+  .then(data => {
+    let cards = document.querySelector('div.cards')
+    let newCard = cardMaker(data)
+    cards.appendChild(newCard)
+  })
+  .catch(err => console.log(err))
 })
 
 /*
@@ -79,7 +74,7 @@ followersArray.forEach(user => {
     </div>
 */
 
-function cardMaker(data){
+function cardMaker({data}){
   let card = document.createElement('div')
   let img = document.createElement('img')
   let cardInfo = document.createElement('div')
